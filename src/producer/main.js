@@ -7,7 +7,7 @@ const stream = Kafka.Producer.createWriteStream({
   topic: 'test'
 });
 
-const NEWS_API_KEY = '10fb3fc6cd794d9085a56f42b506ab1b'; // Replace with your NewsAPI key
+const NEWS_API_KEY = '10fb3fc6cd794d9085a56f42b506ab1b'; 
 const NEWS_API_URL = 'https://newsapi.org/v2/top-headlines?country=us&apiKey=' + NEWS_API_KEY;
 
 async function fetchNewsHeadline() {
@@ -15,7 +15,8 @@ async function fetchNewsHeadline() {
     const response = await axios.get(NEWS_API_URL);
     const articles = response.data.articles;
     if (articles.length > 0) {
-      return articles[0].title; 
+      const randomIndex = Math.floor(Math.random() * articles.length);
+      return articles[randomIndex].title; 
     }
     return null;
   } catch (error) {
@@ -26,18 +27,18 @@ async function fetchNewsHeadline() {
 
 async function queueMessage() {
   const headline = await fetchNewsHeadline();
-  if (headline) {
+  if (headline && headline !== '[Removed]') {
     const success = stream.write(Buffer.from(headline));
     if (success) {
-      console.log('Message successfully written to stream:', headline);
+      console.log('Message successfully written to topic:', headline);
     } else {
-      console.log('Something went wrong..');
+      console.log('error writing to topic');
     }
   } else {
-    console.log('No headline to send');
+    console.log('invalid headline');
   }
 }
 
 setInterval(() => {
   queueMessage();
-}, 3000);
+}, 10_000);
