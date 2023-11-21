@@ -15,7 +15,8 @@ async function fetchNewsHeadline() {
     const response = await axios.get(NEWS_API_URL);
     const articles = response.data.articles;
     if (articles.length > 0) {
-      return articles[0].title; 
+      const randomIndex = Math.floor(Math.random() * articles.length);
+      return articles[randomIndex].title; 
     }
     return null;
   } catch (error) {
@@ -26,18 +27,18 @@ async function fetchNewsHeadline() {
 
 async function queueMessage() {
   const headline = await fetchNewsHeadline();
-  if (headline) {
+  if (headline && headline !== '[Removed]') {
     const success = stream.write(Buffer.from(headline));
     if (success) {
-      console.log('Message successfully written to stream:', headline);
+      console.log('Message successfully written to topic:', headline);
     } else {
-      console.log('Something went wrong..');
+      console.log('error writing to topic');
     }
   } else {
-    console.log('No headline to send');
+    console.log('invalid headline');
   }
 }
 
 setInterval(() => {
   queueMessage();
-}, 3000);
+}, 10_000);
