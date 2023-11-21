@@ -1,4 +1,4 @@
-# Project Title
+# Headline Data Streaming with Apache Spark and Kafka
 
 Streaming News Title Sentiment Analisis
 
