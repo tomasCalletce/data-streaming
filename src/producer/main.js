@@ -7,7 +7,7 @@ const stream = Kafka.Producer.createWriteStream({
   topic: 'test'
 });
 
-const NEWS_API_KEY = '10fb3fc6cd794d9085a56f42b506ab1b'; // Replace with your NewsAPI key
+const NEWS_API_KEY = '10fb3fc6cd794d9085a56f42b506ab1b'; 
 const NEWS_API_URL = 'https://newsapi.org/v2/top-headlines?country=us&apiKey=' + NEWS_API_KEY;
 
 async function fetchNewsHeadline() {
